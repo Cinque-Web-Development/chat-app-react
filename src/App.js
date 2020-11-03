@@ -6,7 +6,7 @@ import "./App.css";
 const socket = io.connect("http://localhost:4000");
 
 function App() {
-  const [state, setStaet] = useState({ message: "", name: "" });
+  const [state, setState] = useState({ message: "", name: "" });
   const [chat, setChat] = useState([]);
 
   useEffect(() => {
@@ -16,14 +16,14 @@ function App() {
   });
 
   const onTextChange = (e) => {
-    setStaet({ ...state, [e.target.name]: e.target.value });
+    setState({ ...state, [e.target.name]: e.target.value });
   };
 
   const onMessageSubmit = (e) => {
     e.preventDefault();
     const { name, message } = state;
     socket.emit("message", { name, message });
-    setStaet({ message: "", name });
+    setState({ message: "", name });
   };
 
   const renderChat = () => {
@@ -37,19 +37,24 @@ function App() {
   };
 
   return (
-    <div className="card">
+    <div id="App" className="card">
       <form onSubmit={onMessageSubmit}>
-        <h1>Messanger</h1>
+        <h1>&lt; Cinque Chat /&gt;</h1>
         <div className="name-field">
           <TextField
+            className="name-input"
             name="name"
             onChange={(e) => onTextChange(e)}
             value={state.name}
             label="Name"
           />
         </div>
-        <div>
+        <div className="render-chat">
+          {renderChat()}
+        </div>
+        <div className="message-input">
           <TextField
+            className="text-input"
             name="message"
             onChange={(e) => onTextChange(e)}
             value={state.message}
@@ -57,13 +62,9 @@ function App() {
             variant="outlined"
             label="Message"
           />
+          <button className="stlt-btn stlt-std-btn">&gt;&gt;</button>
         </div>
-        <button>Send Message</button>
       </form>
-      <div className="render-chat">
-        <h1>Chat Log</h1>
-        {renderChat()}
-      </div>
     </div>
   );
 }

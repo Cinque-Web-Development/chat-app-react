@@ -1,0 +1,89 @@
+body {
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+}
+
+#App {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #203878;
+    height: 100vh;
+    color: #81D8F7;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+h1 {
+    font-family: 'Patua One', sans-serif;
+    text-align: center;
+}
+
+.render-chat {
+    height: 75vh;
+    width: 70vw;
+    background-color: #2B2B2B;
+    padding: 10px;
+}
+
+.message-input {
+    position: fixed;
+    bottom: 20px;
+    /* left: 10px; */
+    width: 90vw;
+}
+
+.name-field {
+    align-self: center;
+}
+
+.name-input {
+    width: 50vw;
+}
+
+.text-input, .name-input {
+    height: 50px;
+    background-color: whitesmoke;
+}
+
+.text-input {
+    width: 72%;
+}
+
+.stlt-btn {
+    font-family: 'Patua One', sans-serif;
+    font-weight: 100;
+    text-decoration: none;
+    border-radius: 5%;
+    border: solid 1px;
+    font-size: large;
+    cursor: pointer;
+    padding: 1px 6px;
+    width: 55px;
+}
+  
+.stlt-std-btn {
+    background-color: #81D8F7;
+    border-color: #203878;
+    color: #203878;
+}
+
+.stlt-std-btn:hover {
+    background-color: #203878;
+    color: #81D8F7;
+    font-weight: 400;
+}
+
+@media only screen and (min-width: 768px) {
+    .render-chat {
+        width: 500px;
+    }
+
+    .text-input, .name-input {
+        width: 500px;
+    }
+}
