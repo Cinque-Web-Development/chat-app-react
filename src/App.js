@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from "react";
 import io from "socket.io-client";
 import TextField from "@material-ui/core/TextField";
+import "emoji-mart/css/emoji-mart.css";
+import { Picker } from "emoji-mart";
 import "./App.css";
 
 const socket = io.connect("http://localhost:4000");
 
 function App() {
-  const [state, setState] = useState({ message: "", name: "" });
+  const [data, setData] = useState({ message: "", name: "" });
   const [chat, setChat] = useState([]);
+  const [emoji, setEmoji] = useState();
 
   useEffect(() => {
     socket.on("message", ({ name, message }) => {
@@ -16,14 +19,14 @@ function App() {
   });
 
   const onTextChange = (e) => {
-    setState({ ...state, [e.target.name]: e.target.value });
+    setData({ ...data, [e.target.name]: e.target.value });
   };
 
   const onMessageSubmit = (e) => {
     e.preventDefault();
-    const { name, message } = state;
+    const { name, message } = data;
     socket.emit("message", { name, message });
-    setState({ message: "", name });
+    setData({ message: "", name });
   };
 
   const renderChat = () => {
@@ -36,6 +39,31 @@ function App() {
     ));
   };
 
+  const addEmoji = (e) => {
+    let emoji = e.native;
+    setData({ message: data.message + emoji, name: data.name });
+  };
+
+  const showEmojis = (e) => {
+    setData({
+      showEmojis: true
+    },
+    () => document.addEventListener("click", closeMenu)
+    )
+  }
+
+  const closeMenu = (e) => {
+    
+    if(Picker !== null && !Picker.contains(e.target)) {
+      setData(
+        {
+          showEmojis: false
+        },
+        () => document.removeEventListener("click", closeMenu)
+      )
+    }
+  }
+
   return (
     <div id="App" className="card">
       <form onSubmit={onMessageSubmit}>
@@ -45,24 +73,26 @@ function App() {
             className="name-input"
             name="name"
             onChange={(e) => onTextChange(e)}
-            value={state.name}
+            value={data.name}
             label="Name"
           />
         </div>
-        <div className="render-chat">
-          {renderChat()}
-        </div>
+        <div className="render-chat">{renderChat()}</div>
         <div className="message-input">
           <TextField
             className="text-input"
             name="message"
             onChange={(e) => onTextChange(e)}
-            value={state.message}
+            value={data.message}
             id="outlined-multiline-static"
             variant="outlined"
             label="Message"
           />
           <button className="stlt-btn stlt-std-btn">&gt;&gt;</button>
+          <span>
+            <Picker onSelect={addEmoji} value={emoji} />
+            <button onClick={showEmojis}>Emoji</button>
+          </span>
         </div>
       </form>
     </div>
