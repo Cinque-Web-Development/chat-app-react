@@ -3,7 +3,7 @@ import io from "socket.io-client";
 import TextField from "@material-ui/core/TextField";
 import "./App.css";
 
-const socket = io.connect("http://localhost:4000");
+const socket = io.connect("https://sk-react-chat-app.herokuapp.com/");
 
 function App() {
   const [state, setState] = useState({ message: "", name: "" });
