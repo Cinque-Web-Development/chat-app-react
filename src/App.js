@@ -5,7 +5,7 @@ import "emoji-mart/css/emoji-mart.css";
 import { Picker } from "emoji-mart";
 import "./App.css";
 
-const socket = io.connect("http://localhost:4000");
+const socket = io.connect("https://sk-react-chat-app.herokuapp.com/");
 
 function App() {
   const [data, setData] = useState({ message: "", name: "" });
