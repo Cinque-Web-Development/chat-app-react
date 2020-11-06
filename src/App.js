@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import io from "socket.io-client";
 import TextField from "@material-ui/core/TextField";
 import "emoji-mart/css/emoji-mart.css";
@@ -11,6 +11,8 @@ function App() {
   const [data, setData] = useState({ message: "", name: "" });
   const [chat, setChat] = useState([]);
   const [emoji, setEmoji] = useState();
+  const emojiPicker = useRef(null);
+  const [emojiShow, setEmojiShow] = useState(false);
 
   useEffect(() => {
     socket.on("message", ({ name, message }) => {
@@ -27,6 +29,7 @@ function App() {
     const { name, message } = data;
     socket.emit("message", { name, message });
     setData({ message: "", name });
+    closeMenu(e);
   };
 
   const renderChat = () => {
@@ -45,24 +48,12 @@ function App() {
   };
 
   const showEmojis = (e) => {
-    setData({
-      showEmojis: true
-    },
-    () => document.addEventListener("click", closeMenu)
-    )
-  }
+    setEmojiShow(true);
+  };
 
   const closeMenu = (e) => {
-    
-    if(Picker !== null && !Picker.contains(e.target)) {
-      setData(
-        {
-          showEmojis: false
-        },
-        () => document.removeEventListener("click", closeMenu)
-      )
-    }
-  }
+    setEmojiShow(false);
+  };
 
   return (
     <div id="App" className="card">
@@ -89,10 +80,13 @@ function App() {
             label="Message"
           />
           <button className="stlt-btn stlt-std-btn">&gt;&gt;</button>
-          <span>
-            <Picker onSelect={addEmoji} value={emoji} />
-            <button onClick={showEmojis}>Emoji</button>
-          </span>
+          {emojiShow ? (
+            <span ref={emojiPicker}>
+              <Picker onSelect={addEmoji} value={emoji} />
+            </span>
+          ) : (
+            <p onClick={showEmojis}>Emoji</p>
+          )}
         </div>
       </form>
     </div>
