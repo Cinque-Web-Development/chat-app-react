@@ -5,7 +5,7 @@ import "emoji-mart/css/emoji-mart.css";
 import { Picker } from "emoji-mart";
 import "./App.css";
 
-const socket = io.connect("http://localhost:4000");
+const socket = io.connect();
 
 function App() {
   const [data, setData] = useState({ message: "", name: "" });
@@ -28,9 +28,11 @@ function App() {
   const onMessageSubmit = (e) => {
     e.preventDefault();
     const { name, message } = data;
-    socket.emit("message", { name, message });
-    setData({ message: "", name });
-    closeMenu(e);
+    if (message) {
+      socket.emit("message", { name, message });
+      setData({ message: "", name });
+      closeMenu(e);
+    }
   };
 
   const renderChat = () => {
